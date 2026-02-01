@@ -1,3 +1,4 @@
+#bash
 sudo nano /etc/nftables.conf
 
 # NftablesStrongDevSecOps
