@@ -1,81 +1,100 @@
-# NftablesStrongDevSecOps 
+---
 
-Configuração de firewall usando **nftables** para ambientes Linux focados em segurança, DevOps e virtualização.
+# Nftables Strong DevSecOps
 
-##  Objetivo
-Este projeto fornece um conjunto de regras de firewall robustas para:
-- Proteger o host contra acessos não autorizados.  
-- Permitir apenas serviços essenciais (SSH, HTTP/HTTPS, DNS, DHCP, ICMP).  
-- Garantir comunicação controlada entre **máquina virtual (virbr0)** e o host.  
-- Registrar tentativas de acesso negadas para auditoria.  
+A robust **firewall configuration using nftables** for Linux environments focused on **security, DevOps, and virtualization**.  
+This project provides a hardened ruleset to protect hosts, control VM communication, and log unauthorized access attempts.
 
-##  Estrutura
-Arquivo principal:
-- `/etc/nftables.conf`
+---
 
-Principais cadeias:
-- **input** → controla tráfego de entrada.  
-- **forward** → controla tráfego roteado (ex.: VM ↔ host).  
-- **output** → controla tráfego de saída (default: accept).  
+## Features
+- **Host protection** against unauthorized access.  
+- Allow only **essential services**:
+  - SSH (22)  
+  - HTTP (80) / HTTPS (443)  
+  - DNS (53 TCP/UDP)  
+  - DHCP (67/68)  
+  - ICMP (ping IPv4/IPv6)  
+- **Controlled communication** between host ↔ VM via `virbr0` (SSH and ICMP).  
+- **Logging** of denied attempts with prefix `NFTables-DROP`.  
+- Default policies:
+  - `DROP` → input & forward  
+  - `ACCEPT` → output  
 
-##  Regras implementadas
-- **Loopback**: aceita todo tráfego interno (`lo`).  
-- **Conexões estabelecidas**: mantém sessões já abertas.  
-- **SSH**: porta 22 liberada.  
-- **Web**: portas 80 (HTTP) e 443 (HTTPS) liberadas.  
-- **DNS**: portas 53 TCP/UDP liberadas.  
-- **DHCP**: portas 67/68 liberadas para atribuição de IP.  
-- **ICMP**: ping IPv4 e IPv6 permitidos.  
-- **VM ↔ Host**: tráfego via `virbr0` (SSH e ICMP).  
-- **Log**: tentativas bloqueadas são registradas com prefixo `NFTables-DROP`.  
+---
 
-##  Instalação
-1. Instale o `nftables`:
+## Project Structure
+```
+NftablesStrongDevSecOps/
+│── nftables.bash        # Firewall ruleset
+│── LICENSE              # MIT License
+└── README.md            # Documentation
+```
+
+---
+
+## Installation
+### Prerequisites
+- Linux system with **nftables** available.
+
+### Steps
+1. Install nftables:
    ```bash
    sudo apt install nftables   # Debian/Ubuntu
    sudo dnf install nftables   # Fedora/RHEL
    ```
-2. Copie o arquivo para `/etc/nftables.conf`:
+2. Copy ruleset to configuration:
    ```bash
    sudo nano /etc/nftables.conf
    ```
-   (cole o conteúdo do arquivo)  
-
-3. Reinicie o serviço:
+   *(Paste the contents of `nftables.bash`)*  
+3. Restart and enable service:
    ```bash
-   sudo systemctl restart nftables 
+   sudo systemctl restart nftables
    sudo systemctl enable nftables
    ```
 
-##  Testes
-Verificar regras ativas:
-```bash
-sudo nft list ruleset
-```
+---
 
-Testar acesso SSH:
-```bash
-ssh user@host
-```
+## Testing
+- List active rules:
+  ```bash
+  sudo nft list ruleset
+  ```
+- Test SSH access:
+  ```bash
+  ssh user@host
+  ```
+- Test ping:
+  ```bash
+  ping 8.8.8.8
+  ```
 
-Testar ping:
-```bash
-ping 8.8.8.8
-```
+---
 
-##  Logs
-Tentativas bloqueadas são registradas no syslog:
+## 📜 Logs
+Blocked attempts are recorded in **syslog**:
 ```bash
 journalctl -k | grep NFTables-DROP
 ```
 
-##  Observações
-- Política padrão: **DROP** para `input` e `forward`.  
-- Política padrão: **ACCEPT** para `output`.  
-- Ajuste portas conforme necessidade do seu ambiente.  
+---
+
+## Purpose
+The goal of this project is to:
+- Provide a **secure baseline firewall** for Linux hosts.  
+- Support **DevSecOps practices** with controlled VM networking.  
+- Enable **auditing and monitoring** of denied traffic.  
 
 ---
 
-Autor: **Gabriel Santana**  
-Projeto: **NftablesStrongDevSecOps**
-```
+## License
+This project is licensed under the **MIT License**.  
+See the `LICENSE` file for details.  
+
+---
+
+## Author
+Developed by **Gabriel Santana**  
+Contact: GabrielSantana1996sp on GitHub (github.com) 
+---
