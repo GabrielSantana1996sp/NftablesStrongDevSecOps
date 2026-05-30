@@ -72,7 +72,7 @@ NftablesStrongDevSecOps/
 
 ---
 
-## 📜 Logs
+## Logs
 Blocked attempts are recorded in **syslog**:
 ```bash
 journalctl -k | grep NFTables-DROP
