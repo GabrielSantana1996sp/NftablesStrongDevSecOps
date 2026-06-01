@@ -1,0 +1,17 @@
+##/etc/ssh/sshd_config
+# Porta alternativa (se quiser usar port knocking)
+Port 22
+
+# Só chave pública, sem senha
+PasswordAuthentication no
+PubkeyAuthentication yes
+
+# Não permitir login direto de root
+PermitRootLogin no
+
+# Limitar tentativas de autenticação
+MaxAuthTries 3
+LoginGraceTime 30
+
+# Logs detalhados para auditoria
+LogLevel VERBOSE
