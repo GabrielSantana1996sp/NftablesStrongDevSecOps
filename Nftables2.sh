@@ -14,10 +14,17 @@ table inet filter {
 
         # HTTP/HTTPS (WEB)
         tcp dport {80,443} ct state new accept
+        
+        # HTTP/HTTPS IPv6
+        tcp dport {80,443} ip6 nexthdr tcp accept
 
         # DNS
         udp dport 53 ct state new accept
         tcp dport 53 ct state new accept
+        
+        # DNS IPv6
+        udp dport 53 ip6 nexthdr udp accept
+        tcp dport 53 ip6 nexthdr tcp accept
 
         # DHCP
         udp sport 67 udp dport 68 accept
